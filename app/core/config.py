@@ -13,5 +13,6 @@ class Settings(BaseSettings):
     PROJECT_NAME: str
     FACTURAPI_USER_SECRET_KEY: str
     FACTURAPI_URL: str
+    SQLALCHEMY_DATABASE_URI: str
 
 settings = Settings()
