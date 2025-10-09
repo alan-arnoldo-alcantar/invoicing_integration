@@ -34,3 +34,4 @@ async def main():
 
 if __name__=="__main__":
     asyncio.run(main())
+    # Run this script as module, python -m app.test.db_connection
