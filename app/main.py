@@ -2,14 +2,18 @@ from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from app.api.main import api_router
 from app.core.config import settings
+from app.exceptions import register_all_exception_handlers
+
 
 def custom_generate_unique_id(route: APIRoute) -> str:
     return f"{route.tags[0]}-{route.name}"
 
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_VERSION}/openapi.json",
-    generate_unique_id_function=custom_generate_unique_id
+    generate_unique_id_function=custom_generate_unique_id,
 )
 
 app.include_router(api_router, prefix=settings.API_VERSION)
+register_all_exception_handlers(app)
