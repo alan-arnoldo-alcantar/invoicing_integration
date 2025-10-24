@@ -5,14 +5,13 @@ from app.models.users import User
 from sqlalchemy import select
 from app.core.security import hash_password
 
-async def get_user_by_email(*, session: AsyncSession, email: EmailStr):
-    result = await session.scalar(select(User).where(User.email == email))
-    result = result.first()
-    return result
+async def get_user_by_email(*, session: AsyncSession, email: EmailStr) -> User:
+    result = await session.execute(select(User).where(User.email == email))
+    return result.scalar_one()
 
 
 async def create_user(*, session: AsyncSession, user: UserSignup) -> User:
-    user.password = hash_password(user.password)
+    user.password = await hash_password(user.password)
     user_validated = UserSignup.model_validate(user)
     db_obj = User(**user_validated.model_dump())
     session.add(db_obj)

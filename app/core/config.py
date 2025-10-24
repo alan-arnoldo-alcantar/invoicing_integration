@@ -12,9 +12,16 @@ class Settings(BaseSettings):
     )
     API_VERSION: str
     PROJECT_NAME: str
+    
     FACTURAPI_USER_SECRET_KEY: str
     FACTURAPI_URL: str
+    
     SQLALCHEMY_DATABASE_URI: str
+
+    TOKEN_SECRET_KEY: str
+    TOKEN_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 5
+
 
 
 settings = Settings()  # type: ignore

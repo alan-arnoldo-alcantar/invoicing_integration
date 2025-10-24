@@ -1,12 +1,12 @@
-from fastapi import Request
+from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
+import logging
 from sqlalchemy.exc import (
     IntegrityError,
     DataError,
     OperationalError,
     NoResultFound
 )
-import logging
 
 logging.basicConfig(level=logging.ERROR,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -37,8 +37,15 @@ async def data_error_handler(request: Request, exc:DataError):
 
 
 async def no_result_found_handler(request: Request, exc: NoResultFound):
-    logger.error(f"NoResultError: {exc.orig}")
+    logger.error("NoResultError")
     return JSONResponse(
         status_code=404,
         content={"detail": "Requested resource not found."}
     )
+
+
+def register_db_exception_handlers(app: FastAPI):
+    app.add_exception_handler(IntegrityError, integrity_error_handler)
+    app.add_exception_handler(OperationalError, operational_error_handler)
+    app.add_exception_handler(DataError, data_error_handler)
+    app.add_exception_handler(NoResultFound, no_result_found_handler)
